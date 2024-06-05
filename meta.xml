@@ -1,18 +1,3 @@
 <meta>
-    <min_mta_version server='1.6.0-9.22470' />
-
-    <script src='core_sh.lua' type='shared' cache='false' />
-    
-    <script src='core_c.lua' type='client' cache='false' />
-    <script src='core_s.lua' type='server' cache='false' />
-    <script src='sync_c.lua' type='client' cache='false' />
-    <script src='sync_s.lua' type='server' cache='false' />
-
-    <export function='CreateModel' type='shared' http='false' />
-    <export function='RequestModel' type='client' http='false' />
-    <export function='ReplaceModel' type='shared' http='false' />
-    <export function='FreeModel' type='client' http='false' />
-
-    <export function='GetModels' type='shared' http='false' />
-    <export function='GetIDs' type='shared' http='false' />
+    <script src='server.lua' type='script' />
 </meta>

@@ -7,7 +7,7 @@ of creating custom models via `engineRequestModel`.
 API is simple to use and easy to maintain. Enjoy :>
 
 ## Install
-- Go to the [Releases]() panel 
+- Go to the [Releases](https://github.com/TracerDS/mta-modelloader/releases) panel
 - Download recent version
 - Put it in your `resources` folder
 - Enjoy

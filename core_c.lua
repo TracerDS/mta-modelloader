@@ -1,12 +1,18 @@
-ML.ReplacedModels = {}
-ML.ReplacedModelsID = {}
+ML.ReplacedModels = {
+    ped = {},
+    vehicle = {},
+}
+ML.ReplacedModelsID = {
+    ped = {},
+    vehicle = {},
+}
 
 -- Function for request ID for a model
 ML.Funcs.RequestModel = function(modelType, modelName, modelData)
     local id = engineRequestModel(modelType)
     if not id then return end
     
-    ML.ReplacedModels[modelName] = {}
+    local modelTable = {}
 
     local col
     local txd
@@ -31,14 +37,18 @@ ML.Funcs.RequestModel = function(modelType, modelName, modelData)
         end
     end
 
-    ML.ReplacedModels[modelName].id = id
-    ML.ReplacedModels[modelName].modelName = modelName
-    ML.ReplacedModels[modelName].col = col
-    ML.ReplacedModels[modelName].txd = txd
-    ML.ReplacedModels[modelName].dff = dff
-    ML.ReplacedModels[modelName].config = modelData.config
+    modelTable.id = id
+    modelTable.modelName = modelName
+    modelTable.col = col
+    modelTable.txd = txd
+    modelTable.dff = dff
+    modelTable.config = modelData.config
 
-    ML.ReplacedModelsID[id] = modelName
+    -- replaced model
+    ML.ReplacedModels[modelType][modelName] = modelTable
+
+    -- helper table used for getting the model by id
+    ML.ReplacedModelsID[modelType][id] = modelName
 
     return id
 end
@@ -47,16 +57,44 @@ end
 ML.Funcs.ReplaceModel = function(model, id)
     if not model or not isElement(model) then return end
 
-    if getElementType(model) == 'vehicle' then
-        local modelName = ML.ReplacedModelsID[id]
-        if not modelName then return end
+    local modelType = getElementType(model)
+    local modelTypeIDTable = ML.ReplacedModelsID[modelType]
+    if not modelTypeIDTable then return end
 
-        local modelEntry = ML.ReplacedModels[modelName]
-        if not modelEntry then return end
+    local modelName = modelTypeIDTable[id]
+    if not modelName then return end
 
+    local modelTypeTable = ML.ReplacedModels[modelType]
+    if not modelTypeTable then return end
+
+    local modelEntry = modelTypeTable[modelName]
+    if not modelEntry then return end
+
+    if modelType == 'vehicle' then
         for name, value in pairs(modelEntry.config) do
-            if not setVehicleHandling(model, name, value) then
-                break
+            if ML.Funcs.IsVehicleProperty(name) then
+                if not setVehicleHandling(model, name, value) then
+                    break
+                end
+            end
+        end
+    end
+    if modelTypeTable == 'ped' then
+        for name, value in pairs(modelEntry.config) then
+            if ML.Funcs.IsWalkingStyle(name) then
+                if not setPedWalkingStyle(model, value) then
+                    break
+                end
+            end
+            if ML.Funcs.IsPedStat(name) then
+                if not setPedStat(model, name, value) then
+                    break
+                end
+            end
+            if ML.Funcs.IsPedVoice(name, value) then
+                if not setPedVoice(model, name, value) then
+                    break
+                end
             end
         end
     end

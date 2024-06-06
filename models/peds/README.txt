@@ -4,3 +4,8 @@ all related vehicle files:
 - txd: Textures file
 - dff: Model file
 - conf: Configuration file
+
+
+If a proper `.conf` file exists for a ped
+then all ped settings will be changed
+according to the `.conf` file

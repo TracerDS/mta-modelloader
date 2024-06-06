@@ -73,6 +73,7 @@ addEvent(resourceName..':ReplaceModel', true)
 addEventHandler(resourceName..':ReplaceModel', localPlayer, function(model, id)
     if type(model) == 'table' then
         for _,entry in ipairs(model) do
+            -- replace provided model with certain id
             ML.Funcs.ReplaceModel(entry, id)
         end
     end

@@ -21,8 +21,8 @@ local function RequestIDs()
 end
 
 -- Sync incoming models
-addEvent(resourceName..':SetSyncedModels', true)
-addEventHandler(resourceName..':SetSyncedModels', localPlayer, function(models)
+addEvent(resourceName..':SendSyncedModels', true)
+addEventHandler(resourceName..':SendSyncedModels', localPlayer, function(models)
     assert(type(models) == 'table', 'Expected table in "modelloader:getModels", got '..type(models))
     syncedModels = models
 
@@ -32,9 +32,12 @@ end)
 -- When resource starts, request synced models
 -- and request ids for them
 addEventHandler('onClientResourceStart', resourceRoot, function()
+    -- if syncedModels table is empty
     if not next(syncedModels) then
+        -- request synced models from the server
         triggerServerEvent(resourceName..':RequestSyncedModels', resourceRoot)
     end
+    -- request ids for models
     RequestIDs()
 end)
 

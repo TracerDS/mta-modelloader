@@ -2,7 +2,7 @@ local syncedIds = {}
 
 -- Send synced models to player
 local function SendSyncedModels(player)
-    triggerClientEvent(player, resourceName..':SetSyncedModels', player, GetModels())
+    triggerClientEvent(player, resourceName..':SendSyncedModels', player, GetModels())
 end
 
 -- Send synced models to a player
@@ -20,7 +20,8 @@ addEventHandler(resourceName..':SendSyncedIDs', resourceRoot, function(ids)
 end)
 
 -- When player joins, send synced models
-addEventHandler('onPlayerJoin', root, function()
+addEventHandler('onPlayerResourceStart', root, function(res)
+    if res ~= resource then return end
     SendSyncedModels(source)
 end)
 
